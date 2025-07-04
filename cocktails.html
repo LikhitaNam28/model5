@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cocktails</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #fdfdfd;
+      display: flex;
+      justify-content: center;
+      margin: 0;
+    }
+    .container {
+      width: 100%;
+      max-width: 600px;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .search-bar {
+      display: flex;
+      width: 100%;
+      border-radius: 15px;
+      overflow: hidden;
+      background: white;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    .search-bar input {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      font-size: 16px;
+      outline: none;
+    }
+    .search-bar button {
+      padding: 0 20px;
+      background-color: #28a745;
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+    }
+    .menu-text {
+      max-width: 70%;
+    }
+    .menu-text h4 {
+      margin-bottom: 5px;
+      font-size: 16px;
+    }
+    .menu-text p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #333;
+    }
+    .menu-text .description {
+      font-size: 13px;
+      color: #666;
+    }
+    .menu-img img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 350px;
+      text-align: center;
+      position: relative;
+    }
+    .modal-content img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .close {
+      position: absolute;
+      top: 5px;
+      right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Cocktails</h1>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search mocktails..." oninput="renderItems()">
+      <button onclick="renderItems()"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+    <div id="menuList"></div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <img id="modalImg" src="">
+      <h3 id="modalTitle"></h3>
+      <p id="modalPrice"></p>
+      <p id="modalDesc"></p>
+    </div>
+  </div>
+
+  <script>
+    const items = [
+  {
+    name: "Margarita",
+    price: "₹250",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNFSw2s2Eogeo_DqufWxgTFrsSRzW7DZpBIw&s",
+    description: "Tequila-based cocktail with lime juice and a salted rim. Classic and refreshing."
+  },
+  {
+    name: "Bloody Mary",
+    price: "₹270",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8L77ULynfsF_oCZqFUKzRYQGnKrnLowbs8Q&s",
+    description: "A spicy blend of vodka, tomato juice, and spices. Perfect for brunch."
+  },
+  {
+    name: "Whiskey Sour",
+    price: "₹290",
+    image: "https://static01.nyt.com/images/2023/08/10/multimedia/as-Whiskey-Sour/09apperex-shrimp-cwmv-mediumSquareAt3X.jpg",
+    description: "Balanced cocktail of whiskey, lemon juice, and a touch of sugar."
+  }
+];
+
+    function renderItems() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const container = document.getElementById("menuList");
+      container.innerHTML = "";
+      items.filter(item => item.name.toLowerCase().includes(query)).forEach(item => {
+        container.innerHTML += `
+          <div class="menu-item" onclick="showDetails('${item.name}', '${item.price}', '${item.image}', \`${item.description}\`)">
+            <div class="menu-text">
+              <h4>${item.name}</h4>
+              <p>${item.price}</p>
+              <p class="description">${item.description}</p>
+            </div>
+            <div class="menu-img">
+              <img src="${item.image}" alt="${item.name}">
+            </div>
+          </div>`;
+      });
+    }
+
+    function showDetails(name, price, image, desc) {
+      document.getElementById("modal").style.display = "flex";
+      document.getElementById("modalTitle").innerText = name;
+      document.getElementById("modalPrice").innerText = price;
+      document.getElementById("modalImg").src = image;
+      document.getElementById("modalDesc").innerText = desc;
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    window.onload = renderItems;
+  </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Andhra Restaurant</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      text-decoration: none;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #fff;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      padding: 20px;
+    }
+
+    .search-container {
+      display: flex;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto 20px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      background: white;
+    }
+
+    .search-container input {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      font-size: 16px;
+      outline: none;
+    }
+    .search-btn {
+      padding: 0 2%;
+      background-color: #d5ded7;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s ease;
+      border-left: 1px solid rgba(0, 0, 0, 0.05);
+      font-size:18px;
+    }
+    .banner img {
+      width: 100%;
+      border-radius: 10px;
+      margin: 10px 0 20px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .category-card {
+      text-align: center;
+      cursor: pointer;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: 0.2s ease-in-out;
+    }
+    .fa-magnifying-glass{
+      color:#f5fafa;
+    }
+    .category-card:hover {
+      transform: scale(1.02);
+    }
+
+    .category-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+    }
+
+    .category-card span {
+      display: block;
+      padding: 10px;
+      background: #fff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search your favourite dishes" onkeyup="if(event.key === 'Enter') searchItems()" />
+      <button onclick="searchItems()" class="search-btn">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </div>
+
+    <div class="banner">
+      <img src="https://graphicsfamily.com/wp-content/uploads/edd/2023/02/Restaurant-Logo-Design-2-1180x664.jpg" alt="Banner" />
+    </div>
+
+    <h2 class="section-title">From our kitchen, to your table.</h2>
+    <div class="categories">
+      <a href="craftbeer.html" class="category-card">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQiOYa1iq7i11TBeYDLSGltHTlY9x0qQZXlA&s" alt="Craft Beer" />
+        <span>Craft Beer</span>
+      </a>
+      <a href="food.html" class="category-card">
+        <img src="https://thumbs.dreamstime.com/b/traditional-curries-rice-andhra-vegetarian-thaali-meals-served-steel-plate-traditional-recipes-consisting-muddu-125773305.jpg" alt="Food" />
+        <span>Food</span>
+      </a>
+      <a href="cooldrinks.html" class="category-card">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPq36dxpkul8KTw_EtPBZ11JRlUzdMjSTkew&s" alt="Liquor" />
+        <span>Soft Drinks</span>
+      </a>
+      <a href="cocktails.html" class="category-card">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZHvek2zKPT-1ZdUVn5S01CmibGd4Z5B5ToA&s" alt="Cocktails" />
+        <span>Cocktails</span>
+      </a>
+      <a href="mocktail.html" class="category-card">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXXR3zShB3I1PNONtp-YtBJmP0ALV6kd4AYA&s" alt="Mocktails" />
+        <span>Mocktails</span>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function searchItems() {
+      const query = document.getElementById("searchInput").value.trim(); // Trim whitespace
+      if (query) {
+        // Redirect to a new global search page with the query as a URL parameter
+        window.location.href = `global-search.html?query=${encodeURIComponent(query)}`;
+      } else {
+        // Optionally, if the search bar is empty, you could just hide/show category cards
+        // For now, if empty, it won't redirect.
+        // const cards = document.querySelectorAll(".category-card");
+        // cards.forEach(card => card.style.display = "block"); // Show all if search is empty
+      }
+    }
+    // Added an event listener for 'Enter' key press on the input field
+    document.getElementById("searchInput").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        searchItems();
+      }
+    });
+  </script>
+</body>
+</html>

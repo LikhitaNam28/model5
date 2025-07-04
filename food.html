@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Food Menu</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+
+    }
+
+    body {
+      margin: 0;
+      background: #fdfdfd;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+  .search-bar {
+  display: flex;
+  width: 75%;
+  max-width: 100%;
+  margin: 0 auto 20px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  font-size: 16px;
+  outline: none;
+}
+
+.search-bar .search-btn {
+  width: 40px;
+  padding: 0;
+  background-color: #28a745;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.search-bar .search-btn:hover {
+  background-color: #218838;
+}
+
+
+
+.toggle-container {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.toggle-btn {
+  padding: 6px 14px;
+  background-color: #28a745;
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Common toggle structure */
+.styled-toggle {
+  position: relative;
+  width: 50px;
+  height: 28px;
+  display: inline-block;
+}
+
+.styled-toggle input {
+  display: none;
+}
+
+.slider {
+  background-color: #e4e4e4;
+  border-radius: 30px;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  box-sizing: border-box;
+  justify-content: flex-start;
+}
+
+.square-box {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+  border-radius: 4px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}
+
+/* VEG toggle styles */
+.veg .square-box {
+  border-color: green;
+}
+.veg input:checked ~ .slider {
+  background-color: #28a745;
+}
+.veg input:checked ~ .slider .square-box {
+  transform: translateX(18px);
+}
+
+/* NONVEG toggle styles */
+.nonveg .square-box {
+  border-color: red;
+}
+.nonveg input:checked ~ .slider {
+  background-color: #ed5d55; /* Light red background when selected */
+}
+.nonveg input:checked ~ .slider .square-box {
+  transform: translateX(18px);
+}
+
+
+ 
+
+
+    .category-nav {
+      display: flex;
+      overflow-x: auto;
+      padding: 10px 0;
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .category-nav a {
+      margin-right: 10px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      background: #eee;
+      text-decoration: none;
+      color: black;
+      font-weight: 500;
+      white-space: nowrap;
+      cursor: pointer;
+      font-size:15px;
+    }
+
+    .category-nav a.active {
+      background: #28a745;
+      color: #fff;
+    }
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 350px;
+  text-align: center;
+  position: relative;
+}
+
+.modal-content img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.modal-content h3 {
+  margin: 10px 0 5px;
+}
+
+.modal-content p {
+  margin: 5px 0;
+}
+
+.close {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.fa-magnifying-glass {
+  color: #f5fafa;
+  font-size: 18px;
+}
+
+
+
+    .section-title {
+      margin-top: 30px;
+      font-size: 20px;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    }
+.description {
+  font-size: 13px;
+  color: #666;
+  margin-top: 4px;
+}
+
+    .menu-text {
+      max-width: 70%;
+    }
+
+    .menu-text h4 {
+      margin: 0 0 5px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+
+.fa-magnifying-glass{
+color:#f5fafa;
+}
+
+    .menu-text p {
+      margin: 0;
+      font-size: 14px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .square-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+.top-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+    .menu-img img {
+      width: 70px;
+      height: 70px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    @media (max-width: 600px) {
+      .menu-img img {
+        width: 60px;
+        height: 60px;
+      }
+      .menu-text h4 {
+        font-size: 14px;
+      }
+
+.top-controls {
+    flex-wrap: nowrap;       
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .toggle-container {
+    flex: 0 0 auto;            
+    display: flex;
+    gap: 8px;
+  }
+
+  .search-bar {
+    flex: 1;                   
+    max-width: unset;
+  }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Food Menu</h1>
+
+   <div class="top-controls">
+  
+
+  <div class="toggle-container">
+   <!-- <button onclick="setTypeFilter('all')" id="btn-all" class="toggle-btn active">All</button>-->
+
+    <label class="styled-toggle veg">
+      <input type="radio" name="type" id="btn-veg" onclick="setTypeFilter('veg')">
+      <div class="slider">
+        <div class="square-box"><div class="dot green"></div></div>
+      </div>
+    </label>
+
+    <label class="styled-toggle nonveg">
+      <input type="radio" name="type" id="btn-nonveg" onclick="setTypeFilter('nonveg')">
+      <div class="slider">
+        <div class="square-box"><div class="dot red"></div></div>
+      </div>
+    </label>
+  </div>
+<!-- Search Bar -->
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search any item..." oninput="renderMenu()">
+    <button onclick="renderMenu()" class="search-btn">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+  </div>
+</div>
+   
+
+
+    <!-- Category Navigation -->
+    <div class="category-nav" id="categoryNav"></div>
+
+   <!-- Food Items -->
+    <div id="menuSections"></div>
+  </div>
+
+<!-- Modal -->
+<div id="itemModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img id="modalImage" src="" alt="">
+    <h3 id="modalTitle"></h3>
+    <p id="modalPrice"></p>
+    <p id="modalDesc"></p>
+  </div>
+</div>
+
+
+
+  <script>
+    const foodItems = {
+      "Starters": [
+        { name: "Paneer Tikka", price: "₹160", image: "https://myfoodstory.com/wp-content/uploads/2017/02/Oven-Baked-Tandoori-Paneer-Tikka-2.jpg", type: "veg",description: "Spicy grilled chunks of paneer marinated in tandoori spices." },
+        { name: "Chicken 65", price: "₹180", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYizzZ6_ZmgX9F60ZBEnOF0cIvgMtrd8IlxA&s", type: "nonveg",description: "Crispy and spicy deep-fried chicken bites, South Indian style." }
+      ],
+      "Soups": [
+        { name: "Tomato Soup", price: "₹90", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFF3XvRwazjJLEdV1TqFmxabmcJt4CpCWkfw&s", type: "veg" ,description: "Creamy and tangy tomato soup with aromatic herbs."},
+        { name: "Chicken Soup", price: "₹110", image: "https://greenhealthycooking.com/wp-content/uploads/2022/03/Chicken-Soup-in-Pot.jpg", type: "nonveg" ,description: "Warm and soothing broth with tender chicken pieces."}
+      ],
+      "Main Course": [
+        { name: "Veg Biryani", price: "₹150", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRI9Tw6cZWpDVACgNwAaqls8uxiPMPrUimMTA&s", type: "veg" ,description: "Aromatic basmati rice cooked with spices and mixed vegetables."},
+        { name: "Chicken Biryani", price: "₹200", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoIycguxFgTpIN3L00tYQhJ2WkypXj5w_QkQ&s", type: "nonveg",description: "Layered rice and chicken with rich biryani masala and herbs." },
+        { name: "Mutton Biryani", price: "₹220", image: "https://www.indianhealthyrecipes.com/wp-content/uploads/2019/02/mutton-biryani-recipe-500x500.jpg", type: "nonveg",description: "Succulent mutton pieces slow-cooked with fragrant rice." },
+        { name: "Paneer Butter Masala", price: "₹170", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQRQMKHs5qBBmBwVN6e7UTPlt3PpK2c6T8XA&s", type: "veg", description: "Soft paneer cubes simmered in a creamy buttery tomato gravy." }
+      ],
+      "Desserts": [
+        { name: "Gulab Jamun", price: "₹80", image: "https://i0.wp.com/www.chitrasfoodbook.com/wp-content/uploads/2016/10/gulab-jamun-using-mix.jpg?w=1200&ssl=1", type: "veg",description: "Soft, juicy milk balls soaked in rose-scented sugar syrup." },
+        { name: "Ice Cream", price: "₹90", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa4Uvfnej2OYYHpPGJs-DBoo_oB4c6ZYpT7g&s", type: "veg",description: "Cold, creamy delight available in multiple flavors." }
+      ],
+      "Breads": [
+        { name: "Butter Naan", price: "₹30", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxm0gMk1BzyNw0Imhk_2AGPMo2HavhWJ4GnA&s", type: "veg",description: "Soft and fluffy naan brushed with melted butter." },
+        { name: "Tandoori Roti", price: "₹25", image: "https://static.toiimg.com/photo/75542650.cms", type: "veg",description: "Crispy whole wheat flatbread cooked in a clay oven." }
+      ]
+    };
+
+    let currentTypeFilter = 'all';
+    let currentCategoryFilter = 'all';
+
+    function setTypeFilter(type) {
+      currentTypeFilter = type;
+      document.querySelectorAll('.toggle-container button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('btn-' + type).classList.add('active');
+      renderMenu();
+    }
+
+    function setCategoryFilter(category) {
+      currentCategoryFilter = category;
+      document.querySelectorAll('.category-nav a').forEach(link => link.classList.remove('active'));
+      document.getElementById('cat-' + category).classList.add('active');
+      renderMenu();
+    }
+
+    function renderMenu() {
+  const container = document.getElementById("menuSections");
+  const nav = document.getElementById("categoryNav");
+  const query = document.getElementById("searchInput").value.toLowerCase();
+  container.innerHTML = "";
+  nav.innerHTML = `<a id="cat-all" onclick="setCategoryFilter('all')">All</a>`;
+
+  for (const section in foodItems) {
+    const sectionId = section.toLowerCase().replace(/\s+/g, '-');
+    nav.innerHTML += `<a id="cat-${sectionId}" onclick="setCategoryFilter('${sectionId}')">${section}</a>`;
+  }
+
+  for (const section in foodItems) {
+    const sectionId = section.toLowerCase().replace(/\s+/g, '-');
+
+    if (currentCategoryFilter !== 'all' && sectionId !== currentCategoryFilter) continue;
+
+    const filtered = foodItems[section].filter(item =>
+      (currentTypeFilter === 'all' || item.type === currentTypeFilter) &&
+      item.name.toLowerCase().includes(query)
+    );
+
+    if (filtered.length === 0) continue;
+
+    container.innerHTML += `<h3 class="section-title" id="${sectionId}">${section}</h3>`;
+    filtered.forEach(item => {
+      const icon = item.type === 'veg'
+        ? `<span><img src="images/veg.jpg" width="15" height="15"></span>`
+        : `<span><img src="images/non veg.jpg" width="15" height="15"></span>`;
+
+      container.innerHTML += `
+        <div class="menu-item" onclick="showDetails('${item.name}', '${item.price}', '${item.image}', \`${item.description || 'No description available.'}\`)">
+          <div class="menu-text">
+            <h4>${icon} ${item.name}</h4>
+            <p>${item.price}</p>
+            <p class="description">${item.description || ''}</p>
+          </div>
+          <div class="menu-img">
+            <img src="${item.image}" alt="${item.name}">
+          </div>
+        </div>`;
+    });
+  }
+
+  if (document.getElementById('cat-' + currentCategoryFilter)) {
+    document.getElementById('cat-' + currentCategoryFilter).classList.add('active');
+  }
+}
+
+
+function showDetails(name, price, image, description) {
+  document.getElementById("modalTitle").textContent = name;
+  document.getElementById("modalPrice").textContent = price;
+  document.getElementById("modalImage").src = image;
+  document.getElementById("modalDesc").textContent = description;
+  document.getElementById("itemModal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("itemModal").style.display = "none";
+}
+
+
+    window.onload = () => renderMenu();
+  </script>
+</body>
+</html>

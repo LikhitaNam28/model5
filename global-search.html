@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Search Results</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <style>
+        /* General Body and Container */
+        *{
+            text-decoration: none;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #fdfdfd;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+            text-decoration:none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+font-size:20px;
+        }
+
+        /* Search Bar Styling (similar to index.html but for this page) */
+        .search-bar {
+            display: flex;
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            background: white;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-bar .search-btn {
+            padding: 0 20px;
+            background-color: #28a745; /* Changed color for consistency with previous global search */
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+            border-left: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .search-bar .search-btn:hover {
+            background-color: #218838;
+        }
+        .fa-magnifying-glass { /* Ensures the icon color is visible */
+            color: white;
+        }
+
+
+        /* Section Title for Categories */
+        .section-title {
+            margin-top: 30px;
+            font-size: 20px;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 5px;
+            color: #555;
+        }
+
+        /* Menu Item Styling */
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .menu-text {
+            flex: 1;
+            padding-right: 10px;
+        }
+
+        .menu-text h4 {
+            margin: 0 0 5px;
+            font-size: 16px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .menu-text p {
+            margin: 0;
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .description {
+            font-size: 13px;
+            color: #666;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        .menu-img {
+            flex-shrink: 0;
+        }
+
+        .menu-img img {
+            width: 85px;
+            height: 85px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        /* No items found message */
+        .no-results {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 18px;
+            color: #777;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+        }
+
+        .modal-content h3 {
+            margin: 10px 0 8px;
+            font-size: 22px;
+            color: #333;
+        }
+
+        .modal-content .price-modal {
+            margin: 5px 0 10px;
+            font-size: 18px;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .modal-content .desc-modal {
+            margin: 10px 0;
+            font-size: 15px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 0;
+            }
+
+            .menu-img img {
+                width: 70px;
+                height: 70px;
+            }
+
+            .menu-text h4 {
+                font-size: 15px;
+            }
+
+            .menu-text p {
+                font-size: 13px;
+            }
+
+            .description {
+                font-size: 12px;
+            }
+
+            .modal-content {
+                padding: 15px;
+            }
+
+            .modal-content img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .modal-content h3 {
+                font-size: 20px;
+            }
+
+            .modal-content .price-modal {
+                font-size: 16px;
+            }
+
+            .modal-content .desc-modal {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Global Search Results</h1>
+
+        <div class="search-bar">
+            <input type="text" id="globalSearchInput" placeholder="Search all menu items..." onkeyup="if(event.key === 'Enter') displayMenuItems()" />
+            <button onclick="displayMenuItems()" class="search-btn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+        <a href="index.html" style="display: block; text-align: center; margin-bottom: 20px; color: #28a745; font-weight: bold;">← Back to Home</a>
+
+
+        <div id="menuList">
+            </div>
+    </div>
+
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" src="" alt="" />
+            <h3 id="modalTitle"></h3>
+            <p id="modalPrice" class="price-modal"></p>
+            <p id="modalDesc" class="desc-modal"></p>
+        </div>
+    </div>
+
+    <script>
+        // Consolidated Data for All Menu Items
+        const allMenuItems = [
+            // --- Food Items (from food.html) ---
+            { name: "Paneer Tikka", price: "₹160", image: "https://myfoodstory.com/wp-content/uploads/2017/02/Oven-Baked-Tandoori-Paneer-Tikka-2.jpg", type: "veg", description: "Spicy grilled chunks of paneer marinated in tandoori spices.", category: "Starters" },
+            { name: "Chicken 65", price: "₹180", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYizzZ6_ZmgX9F60ZBEnOF0cIvgMtrd8IlxA&s", type: "nonveg", description: "Crispy and spicy deep-fried chicken bites, South Indian style.", category: "Starters" },
+            { name: "Tomato Soup", price: "₹90", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFF3XvRwazjJLEdV1TqFmxabmcJt4CpCWkfw&s", type: "veg", description: "Creamy and tangy tomato soup with aromatic herbs.", category: "Soups" },
+            { name: "Chicken Soup", price: "₹110", image: "https://greenhealthycooking.com/wp-content/uploads/2022/03/Chicken-Soup-in-Pot.jpg", type: "nonveg", description: "Warm and soothing broth with tender chicken pieces.", category: "Soups" },
+            { name: "Veg Biryani", price: "₹150", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRI9Tw6cZWpDVACgNwAaqls8uxiPMPrUimMTA&s", type: "veg", description: "Aromatic basmati rice cooked with spices and mixed vegetables.", category: "Main Course" },
+            { name: "Chicken Biryani", price: "₹200", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoIycguxFgTpIN3L00tYQhJ2WkypXj5w_QkQ&s", type: "nonveg", description: "Layered rice and chicken with rich biryani masala and herbs.", category: "Main Course" },
+            { name: "Mutton Biryani", price: "₹220", image: "https://www.indianhealthyrecipes.com/wp-content/uploads/2019/02/mutton-biryani-recipe-500x500.jpg", type: "nonveg", description: "Succulent mutton pieces slow-cooked with fragrant rice.", category: "Main Course" },
+            { name: "Paneer Butter Masala", price: "₹170", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQRQMKHs5qBBmBwVN6e7UTPlt3PpK2c6T8XA&s", type: "veg", description: "Soft paneer cubes simmered in a creamy buttery tomato gravy.", category: "Main Course" },
+            { name: "Gulab Jamun", price: "₹80", image: "https://i0.wp.com/www.chitrasfoodbook.com/wp-content/uploads/2016/10/gulab-jamun-using-mix.jpg?w=1200&ssl=1", type: "veg", description: "Soft, juicy milk balls soaked in rose-scented sugar syrup.", category: "Desserts" },
+            { name: "Ice Cream", price: "₹90", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa4Uvfnej2OYYHpPGJs-DBoo_oB4c6ZYpT7g&s", type: "veg", description: "Cold, creamy delight available in multiple flavors.", category: "Desserts" },
+            { name: "Butter Naan", price: "₹30", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxm0gMk1BzyNw0Imhk_2AGPMo2HavhWJ4GnA&s", type: "veg", description: "Soft and fluffy naan brushed with melted butter.", category: "Breads" },
+            { name: "Tandoori Roti", price: "₹25", image: "https://static.toiimg.com/photo/75542650.cms", type: "veg", description: "Crispy whole wheat flatbread cooked in a clay oven.", category: "Breads" },
+
+            // --- Craft Beer Items (from craftbeer.html) ---
+            { name: "Heineken", price: "₹220", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5iJadCG-VzCw4hQznVP08WVXCEjXclBmU9w&s", description: "A smooth European lager with a mild bitter finish. Best enjoyed chilled.", category: "Craft Beer", type: "alcoholic" },
+            { name: "Budweiser", price: "₹200", image: "https://bottlestoreblr.com/cdn/shop/files/Budwisermagnum.jpg?v=1692688741", description: "A popular American-style lager known for its clean and crisp flavor.", category: "Craft Beer", type: "alcoholic" },
+            { name: "Bira 91 Blonde", price: "₹180", image: "https://static.wixstatic.com/media/89a845_c39beac5d4dd455fab5fc5367692b519~mv2.jpg/v1/fill/w_532,h_712,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/89a845_c39beac5d4dd455fab5fc5367692b519~mv2.jpg", description: "Bold and malty craft beer brewed in India. Perfect for strong beer lovers.", category: "Craft Beer", type: "alcoholic" },
+            { name: "Kingfisher Ultra", price: "₹160", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-pXz1KR6AICtW__SKAEAoLfkxEFJiRoNK9Q&s", description: "Smooth and crisp with a refined taste. Light, yet satisfying.", category: "Craft Beer", type: "alcoholic" },
+            { name: "Corona Extra", price: "₹250", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvHJ5wZ6Zokd0Vj6Zaz3iSe7roifEDHs2urA&s", description: "Mexican beer that goes great with lime. Refreshing and globally loved.", category: "Craft Beer", type: "alcoholic" },
+
+            // --- Cool Drinks (from cooldrinks.html) ---
+            { name: "Coca-Cola", price: "₹40", image: "https://www.coca-cola.com/content/dam/onexp/us/en/brands/coca-cola-original/coke-de-mexico.png", description: "Classic fizzy cola beverage. Refreshing taste and perfect with snacks.", category: "Cool Drinks", type: "non-alcoholic" },
+            { name: "Sprite", price: "₹35", image: "https://instamart-media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,h_600/NI_CATALOG/IMAGES/CIW/2024/3/8/9fedc0ca-6634-4752-8d87-a9fc8bac8b82_softdrinks-juiceandsoda_KWZRDPUQ9B_MN.png", description: "Lemon-lime soda that gives you a burst of freshness. Best served chilled.", category: "Cool Drinks", type: "non-alcoholic" },
+            { name: "Pepsi", price: "₹40", image: "https://m.media-amazon.com/images/I/51pGxfs4w1L.jpg", description: "Pepsi's bold and smooth taste is a favorite among cola lovers.", category: "Cool Drinks", type: "non-alcoholic" },
+            { name: "Maaza", price: "₹30", image: "https://m.media-amazon.com/images/I/61+jGc7vLIL.jpg", description: "Made with real mango pulp. A rich and fruity mango experience.", category: "Cool Drinks", type: "non-alcoholic" },
+            { name: "Red Bull", price: "₹90", image: "https://substackcdn.com/image/fetch/$s_!PaKk!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fe62fbb06-b680-4b19-857f-e2b78f327424_1920x1080.jpeg", description: "Energy drink to boost your stamina and alertness. Drink responsibly.", category: "Cool Drinks", type: "non-alcoholic" },
+
+            // --- Cocktails (from cocktails.html) ---
+            { name: "Margarita", price: "₹250", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNFSw2s2Eogeo_DqufWxgTFrsSRzW7DZpBIw&s", description: "Tequila-based cocktail with lime juice and a salted rim. Classic and refreshing.", category: "Cocktails", type: "alcoholic" },
+            { name: "Bloody Mary", price: "₹270", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8L77ULynfsF_oCZqFUKzRYQGnKrnLowbs8Q&s", description: "A spicy blend of vodka, tomato juice, and spices. Perfect for brunch.", category: "Cocktails", type: "alcoholic" },
+            { name: "Whiskey Sour", price: "₹290", image: "https://static01.nyt.com/images/2023/08/10/multimedia/as-Whiskey-Sour/09apperex-shrimp-cwmv-mediumSquareAt3X.jpg", description: "Balanced cocktail of whiskey, lemon juice, and a touch of sugar.", category: "Cocktails", type: "alcoholic" },
+
+            // --- Mocktails (from mocktail.html) ---
+            { name: "Virgin Mojito", price: "₹10000", image: "images/virgin.jpg", description: "Refreshing lime and mint blend, served chilled with soda.", category: "Mocktails", type: "non-alcoholic" },
+            { name: "Blue Lagoon", price: "₹100", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoHd3PAygr1G1sJNJre_RJBbJLZUOCQ4nbGw&s", description: "Lemonade and blue curacao syrup blend for a tropical flavor burst.", category: "Mocktails", type: "non-alcoholic" },
+            { name: "Fruit Punch", price: "₹120", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQngs1rFAjTSmH9yCcQ1Q2Ern136QJSeHVduA&s", description: "A medley of fresh fruit juices blended with ice and soda.", category: "Mocktails", type: "non-alcoholic" },
+            { name: "Fruits", price: "₹180", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQngs1rFAjTSmH9yCcQ1Q2Ern136QJSeHVduA&s", description: "A medley of fresh fruit juices blended with ice and soda.", category: "Mocktails", type: "non-alcoholic" }
+        ];
+
+        let currentSearchQuery = '';
+
+        /**
+         * Parses URL parameters to get the initial search query.
+         */
+        function getInitialQuery() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('query');
+            if (query) {
+                document.getElementById('globalSearchInput').value = query;
+                return query;
+            }
+            return '';
+        }
+
+        /**
+         * Filters and displays menu items based on the search input.
+         * Items are grouped by their original category.
+         */
+        function displayMenuItems() {
+            const searchInput = document.getElementById('globalSearchInput');
+            const menuContainer = document.getElementById('menuList');
+            menuContainer.innerHTML = ''; // Clear previous results
+
+            currentSearchQuery = searchInput.value.toLowerCase();
+
+            // Filter items based on name, description, or category
+            const filteredItems = allMenuItems.filter(item =>
+                item.name.toLowerCase().includes(currentSearchQuery) ||
+                (item.description && item.description.toLowerCase().includes(currentSearchQuery)) ||
+                item.category.toLowerCase().includes(currentSearchQuery)
+            );
+
+            if (filteredItems.length === 0) {
+                menuContainer.innerHTML = '<p class="no-results">No items found matching your search.</p>';
+                return;
+            }
+
+            // Group filtered items by category for better organization in display
+            const groupedItems = {};
+            filteredItems.forEach(item => {
+                if (!groupedItems[item.category]) {
+                    groupedItems[item.category] = [];
+                }
+                groupedItems[item.category].push(item);
+            });
+
+            // Render items grouped by category
+            for (const category in groupedItems) {
+                menuContainer.innerHTML += `<h3 class="section-title">${category}</h3>`;
+                groupedItems[category].forEach(item => {
+                    // Determine and add the veg/nonveg icon if applicable
+                    let typeIcon = '';
+                    if (item.type === 'veg') {
+                        typeIcon = `<span><img src="images/veg.jpg" width="15" height="15" alt="Veg"></span>`;
+                    } else if (item.type === 'nonveg') {
+                        typeIcon = `<span><img src="images/non veg.jpg" width="15" height="15" alt="Non-Veg"></span>`;
+                    }
+
+                    menuContainer.innerHTML += `
+                        <div class="menu-item" onclick="showDetails('${item.name}', '${item.price}', '${item.image}', \`${item.description || 'No description available.'}\`, '${item.category}')">
+                            <div class="menu-text">
+                                <h4>${typeIcon} ${item.name}</h4>
+                                <p>${item.price}</p>
+                                <p class="description">${item.description || ''}</p>
+                            </div>
+                            <div class="menu-img">
+                                <img src="${item.image}" alt="${item.name}">
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        /**
+         * Displays the modal with detailed information of a clicked menu item.
+         * @param {string} name - The name of the item.
+         * @param {string} price - The price of the item.
+         * @param {string} image - The URL of the item's image.
+         * @param {string} description - The description of the item.
+         * @param {string} category - The category of the item (optional, for display in modal).
+         */
+        function showDetails(name, price, image, description, category) {
+            document.getElementById("modalTitle").textContent = name;
+            document.getElementById("modalPrice").textContent = price;
+            document.getElementById("modalImage").src = image;
+            document.getElementById("modalDesc").textContent = description;
+            document.getElementById("itemModal").style.display = "flex"; // Show the modal
+        }
+
+        /**
+         * Closes the item details modal.
+         */
+        function closeModal() {
+            document.getElementById("itemModal").style.display = "none"; // Hide the modal
+        }
+
+        // On page load, get the query from the URL and display results
+        window.onload = function() {
+            getInitialQuery(); // Populate search bar if query exists in URL
+            displayMenuItems(); // Perform search based on initial query
+        };
+    </script>
+</body>
+</html>
